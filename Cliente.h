@@ -4,22 +4,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef struct Cliente {
+typedef struct {
     int codCliente;
-    char nome[50];
-} Cliente;
+    char nome[100];
+} CLIENTE;
 
-// Imprime cliente
-void imprime(Cliente* func);
+// Imprime Cliente
+void imprime(CLIENTE* func);
 
-// Cria cliente. Lembrar de usar free(cliente)
-Cliente* cliente(int cod, char* nome);
+// Cria Cliente. Lembrar de usar free(CLIENTE)
+CLIENTE* Cliente(int cod, char* nome);
 
-// Le um cliente do arquivo in na posicao atual do cursor
-// Retorna um ponteiro para cliente lido do arquivo
-Cliente* le(FILE* in);
+// Le um CLIENTE do arquivo in na posicao atual do cursor
+// Retorna um ponteiro para CLIENTE lido do arquivo
+CLIENTE* le(FILE* in);
 
-// Retorna tamanho do cliente em bytes
+// Retorna tamanho do CLIENTE em bytes
 int tamanho();
 
 #endif

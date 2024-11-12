@@ -4,7 +4,7 @@
 #include <stdarg.h>
 
 // Imprime cliente
-void imprime(Cliente *cliente) {
+void imprime(CLIENTE *cliente) {
     printf("**********************************************\n");
     printf("Cliente de código ");
     printf("%d\n", cliente->codCliente);
@@ -13,8 +13,8 @@ void imprime(Cliente *cliente) {
 }
 
 // Cria cliente. Lembrar de usar free(func)
-Cliente *cliente(int cod, char *nome) {
-    Cliente *cliente = (Cliente *) malloc(sizeof(Cliente));
+CLIENTE *Cliente(int cod, char *nome) {
+    CLIENTE *cliente = (CLIENTE *) malloc(sizeof(CLIENTE));
     //inicializa espaço de memória com ZEROS
     if (cliente) memset(cliente, 0, sizeof(Cliente));
     //copia valores para os campos de cliente
@@ -26,8 +26,8 @@ Cliente *cliente(int cod, char *nome) {
 
 // Le um cliente do arquivo in na posicao atual do cursor
 // Retorna um ponteiro para cliente lido do arquivo
-Cliente *le(FILE *in) {
-    Cliente *func = (Cliente *) malloc(sizeof(Cliente));
+CLIENTE *le(FILE *in) {
+    CLIENTE *func = (CLIENTE *) malloc(sizeof(CLIENTE));
     if (0 >= fread(&func->codCliente, sizeof(int), 1, in)) {
 	free(func);
 	return NULL;

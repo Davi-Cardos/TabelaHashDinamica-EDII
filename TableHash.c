@@ -1,11 +1,7 @@
+#include "cliente.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct {
-    int CodCliente;
-    char Nome[100];
-}CLIENTE;
 
 typedef struct {
     CLIENTE *cliente;
@@ -21,7 +17,7 @@ int proximoCompartimento;
 } TABELAHASH;
 
 TABELAHASH* inicializarTABELAHASH(int tamanhoInicial, int fatorCarga) { 
-    
+
 TABELAHASH *tabela = (TABELAHASH*)malloc(sizeof(TABELAHASH)); 
 tabela->tabela = (ENDERECO**)calloc(tamanhoInicial, sizeof(ENDERECO*)); 
 tabela->tamanhoAtual = tamanhoInicial; 
