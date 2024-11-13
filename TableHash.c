@@ -76,6 +76,8 @@ void expandir(TABELAHASH *tabela) {
 
     int expandirElemento = tabela->proximoCompartimento;
 
+    printf("Elemento a ser expandido: %d\n", expandirElemento);
+
     int proxCompartimento = tabela->proximoCompartimento + 1;
 
     ENDERECO * atual = tabela->tabela[expandirElemento]; //Pego cada elemento que tenho na posicao. Exemplo: Tenho que expandir a posição 0, e dentro da posição 0 tenho os clientes de cod 4 e cod 8. Pego a primeria posição e vou recalculando para cada um a função hash
@@ -87,6 +89,10 @@ void expandir(TABELAHASH *tabela) {
 
         int novaPosicao = funcaoHash(atual->cliente->codCliente, tabela->tamanhoUnical, qtdExpansoes);
 
+        if(novaPosicao < expandirElemento) {
+            novaPosicao = funcaoHash(atual->cliente->codCliente, tabela->tamanhoUnical, qtdExpansoes);
+        }
+
         //Cio um novo cliente na minha nva tabela redimensuionada
         ENDERECO *novoCliente = (ENDERECO *) malloc(sizeof(ENDERECO *));
         novoCliente->cliente = atual->cliente;
@@ -96,8 +102,10 @@ void expandir(TABELAHASH *tabela) {
 
     }
 
-      for (int i = 0; i < tabela->tamanhoAnterior; i++) {
-        if (i == expandirElemento) continue;  // Não precisa copiar a posição expandida novamente
+    //Passando tudo que tava na tabela anterior para essa sem calcular a função hash dos outros
+
+      for (int i = 0; i < tabela->tamanhoAtual; i++) {
+        if (i == expandirElemento) continue; 
 
         ENDERECO *atual = tabela->tabela[i];
         while (atual != NULL) {
@@ -122,7 +130,6 @@ void expandir(TABELAHASH *tabela) {
 }
 
 int funcaoHash(int valor, int m, int l) {
-
     return valor % (m * (int)(pow(2, l))); //Asseguro que o valor da potencia sempre será um inteiro porque a funcao pow retorna double
 
 }
@@ -141,7 +148,8 @@ int fatorCarga(int num, int m, int fatorCarga) {
 
 int verificaDuplicacao(TABELAHASH *tabela) {
 
-    int qtdDuplicacoes = tabela->duplicacoes;
+    //O que estou fazendo aqui é justamente verificando se meu p chegou ao fim da minha tabela inicial. Se chegou minha tabela agr vai ter o tamanho atual o p volta a aser 0 e a duplicação passa a ter valor 1 para todos
+
 
     if(tabela->proximoCompartimento == tabela->tamanhoAnterior) {
 
@@ -149,11 +157,12 @@ int verificaDuplicacao(TABELAHASH *tabela) {
         tabela->proximoCompartimento = 0;
         tabela->duplicacoes = tabela->duplicacoes + 1;
 
-        return tabela->duplicacoes;
-
     }
 
-    return qtdDuplicacoes + 1;
+    //Se meu p não chegou no final, então eu apenas pego a quantidade de duplicações e aumento 1 na variável. se ele chegou até o final atualizo a minha qtd de duplicações atualizada e aumento mais 1 pois calculo minha nova função hash
+    //Exemplo x % 7 e x % 14 nas expansões, quando p expandir o 6 (0-6) chegarei no comprimento da minha tabela então p voltará a ser 0 e minha nova função hash será x % 14 e x% 28 na expansão  
+    return tabela->duplicacoes + 1;
+
 
 }
 
@@ -201,6 +210,25 @@ int main() {
     CLIENTE *cliente8 = Cliente(8, "Joao2");
     CLIENTE *cliente9 = Cliente(14, "Carol");
     CLIENTE *cliente10 = Cliente(15, "Pedro");
+    CLIENTE *cliente11 = Cliente(20, "Lucas");
+    CLIENTE *cliente12 = Cliente(31, "Fernanda");
+    CLIENTE *cliente13 = Cliente(42, "Leonardo");
+    CLIENTE *cliente14 = Cliente(53, "Paula");
+    CLIENTE *cliente15 = Cliente(64, "Gabriel");
+    CLIENTE *cliente16 = Cliente(75, "Julia");
+    CLIENTE *cliente17 = Cliente(86, "Henrique");
+    CLIENTE *cliente18 = Cliente(97, "Rafaela");
+    CLIENTE *cliente19 = Cliente(108, "Marcelo");
+    CLIENTE *cliente20 = Cliente(119, "Bianca");
+    CLIENTE *cliente21 = Cliente(25, "Marta");
+    CLIENTE *cliente22 = Cliente(37, "Eduardo");
+    CLIENTE *cliente23 = Cliente(48, "Renata");
+    CLIENTE *cliente24 = Cliente(59, "Roberto");
+    CLIENTE *cliente25 = Cliente(63, "Aline");
+    CLIENTE *cliente26 = Cliente(72, "Victor");
+    CLIENTE *cliente27 = Cliente(83, "Sofia");
+    CLIENTE *cliente28 = Cliente(91, "Thiago");
+    CLIENTE *cliente29 = Cliente(100, "Mariana");
   
     // Inserção de clientes e impressão da tabela após cada inserção
     inserirElemento(tabela, cliente1);
@@ -243,6 +271,84 @@ int main() {
     imprimirTabela(tabela);
      printf("p = %d\n", tabela->proximoCompartimento);
 
+     inserirElemento(tabela, cliente11);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente12);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente13);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente14);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente15);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente16);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente17);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente18);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente19);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente20);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente21);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente22);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente23);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente24);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente25);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente26);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente27);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente28);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+    inserirElemento(tabela, cliente29);
+    imprimirTabela(tabela);
+    printf("p = %d\n", tabela->proximoCompartimento);
+
+
+
     free(cliente1);
     free(cliente2);
     free(cliente3);
@@ -253,6 +359,25 @@ int main() {
     free(cliente8);
     free(cliente9);
     free(cliente10);
+    free(cliente11);
+    free(cliente12);
+    free(cliente13);
+    free(cliente14);
+    free(cliente15);
+    free(cliente16);
+    free(cliente17);
+    free(cliente18);
+    free(cliente19);
+    free(cliente20);
+    free(cliente21);
+    free(cliente22);
+    free(cliente23);
+    free(cliente24);
+    free(cliente25);
+    free(cliente26);
+    free(cliente27);
+    free(cliente28);
+    free(cliente29);
    
     liberarTabela(tabela);
 
