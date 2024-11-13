@@ -4,6 +4,7 @@
 #include <string.h>
 #include <math.h>
 
+
 typedef struct {
     CLIENTE *cliente;
     struct ENDERECO *prox;
@@ -36,7 +37,14 @@ return tabela;
 
 void inserirElemento(TABELAHASH * tabela, CLIENTE * cliente) {
 
+    int elementoASerDuplicado = tabela->proximoCompartimento;
+
     int posicao = funcaoHash(cliente->codCliente, tabela->tamanhoUnical, tabela->duplicacoes);
+
+    if(posicao < elementoASerDuplicado) {
+        posicao = funcaoHash(cliente->codCliente, tabela->tamanhoUnical, tabela->duplicacoes + 1);
+    }
+   
 
     ENDERECO * novoCliente = (ENDERECO *) malloc(sizeof(ENDERECO));
     novoCliente->cliente = cliente;
@@ -65,7 +73,6 @@ void inserirElemento(TABELAHASH * tabela, CLIENTE * cliente) {
     }
 
     tabela->numeroElementosNaTabela++;
-
 }
 
 void expandir(TABELAHASH *tabela) {
@@ -74,13 +81,13 @@ void expandir(TABELAHASH *tabela) {
 
     int qtdExpansoes = verificaDuplicacao(tabela);
 
-    int expandirElemento = tabela->proximoCompartimento;
+    int expandirCompartimento = tabela->proximoCompartimento;
 
-    printf("Elemento a ser expandido: %d\n", expandirElemento);
+    printf("Elemento a ser expandido: %d\n", expandirCompartimento);
 
     int proxCompartimento = tabela->proximoCompartimento + 1;
 
-    ENDERECO * atual = tabela->tabela[expandirElemento]; //Pego cada elemento que tenho na posicao. Exemplo: Tenho que expandir a posição 0, e dentro da posição 0 tenho os clientes de cod 4 e cod 8. Pego a primeria posição e vou recalculando para cada um a função hash
+    ENDERECO * atual = tabela->tabela[expandirCompartimento]; //Pego cada elemento que tenho na posicao. Exemplo: Tenho que expandir a posição 0, e dentro da posição 0 tenho os clientes de cod 4 e cod 8. Pego a primeria posição e vou recalculando para cada um a função hash
 
     ENDERECO **novaTabela = (ENDERECO **) calloc(novoTamanho, sizeof(ENDERECO *)); //Crio a nova tabela
 
@@ -89,12 +96,8 @@ void expandir(TABELAHASH *tabela) {
 
         int novaPosicao = funcaoHash(atual->cliente->codCliente, tabela->tamanhoUnical, qtdExpansoes);
 
-        if(novaPosicao < expandirElemento) {
-            novaPosicao = funcaoHash(atual->cliente->codCliente, tabela->tamanhoUnical, qtdExpansoes);
-        }
-
         //Cio um novo cliente na minha nva tabela redimensuionada
-        ENDERECO *novoCliente = (ENDERECO *) malloc(sizeof(ENDERECO *));
+        ENDERECO *novoCliente = (ENDERECO *) malloc(sizeof(ENDERECO));
         novoCliente->cliente = atual->cliente;
         novoCliente->prox = novaTabela[novaPosicao];
         novaTabela[novaPosicao] = novoCliente;
@@ -105,7 +108,7 @@ void expandir(TABELAHASH *tabela) {
     //Passando tudo que tava na tabela anterior para essa sem calcular a função hash dos outros
 
       for (int i = 0; i < tabela->tamanhoAtual; i++) {
-        if (i == expandirElemento) continue; 
+        if (i == expandirCompartimento) continue; 
 
         ENDERECO *atual = tabela->tabela[i];
         while (atual != NULL) {
@@ -149,7 +152,7 @@ int fatorCarga(int num, int m, int fatorCarga) {
 int verificaDuplicacao(TABELAHASH *tabela) {
 
     //O que estou fazendo aqui é justamente verificando se meu p chegou ao fim da minha tabela inicial. Se chegou minha tabela agr vai ter o tamanho atual o p volta a aser 0 e a duplicação passa a ter valor 1 para todos
-
+    int qtdExpansoes = tabela->duplicacoes;
 
     if(tabela->proximoCompartimento == tabela->tamanhoAnterior) {
 
