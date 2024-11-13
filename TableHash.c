@@ -37,6 +37,9 @@ return tabela;
 
 void inserirElemento(TABELAHASH * tabela, CLIENTE * cliente) {
 
+    int qtdElementos = tabela->numeroElementosNaTabela + 1;
+
+
     int elementoASerDuplicado = tabela->proximoCompartimento;
 
     int posicao = funcaoHash(cliente->codCliente, tabela->tamanhoUnical, tabela->duplicacoes);
@@ -50,7 +53,10 @@ void inserirElemento(TABELAHASH * tabela, CLIENTE * cliente) {
     novoCliente->cliente = cliente;
     novoCliente->prox = NULL;
 
-    if(fatorCarga(tabela->numeroElementosNaTabela, tabela->tamanhoAtual, tabela->fatorCarga) == 1) {
+    // printf("Fator de carga: %d\n", fatorCarga(tabela->numeroElementosNaTabela, tabela->tamanhoAtual, tabela->fatorCarga));
+    // printf("numeroElementosNaTabela: %d\n", tabela->numeroElementosNaTabela);
+    // printf("Tamanho Atua: %d\n", tabela->tamanhoAtual);
+    if(fatorCarga(qtdElementos, tabela->tamanhoAtual, tabela->fatorCarga) == 1) {
 
     if(tabela->tabela[posicao] == NULL) {
         tabela->tabela[posicao] = novoCliente;
@@ -73,6 +79,7 @@ void inserirElemento(TABELAHASH * tabela, CLIENTE * cliente) {
     }
 
     tabela->numeroElementosNaTabela++;
+
 }
 
 void expandir(TABELAHASH *tabela) {
@@ -232,6 +239,7 @@ int main() {
     CLIENTE *cliente27 = Cliente(83, "Sofia");
     CLIENTE *cliente28 = Cliente(91, "Thiago");
     CLIENTE *cliente29 = Cliente(100, "Mariana");
+    CLIENTE *cliente30 = Cliente(56, "Dhulia");
   
     // Inserção de clientes e impressão da tabela após cada inserção
     inserirElemento(tabela, cliente1);
@@ -350,37 +358,9 @@ int main() {
     imprimirTabela(tabela);
     printf("p = %d\n", tabela->proximoCompartimento);
 
-
-
-    free(cliente1);
-    free(cliente2);
-    free(cliente3);
-    free(cliente4);
-    free(cliente5);
-    free(cliente6);
-    free(cliente7);
-    free(cliente8);
-    free(cliente9);
-    free(cliente10);
-    free(cliente11);
-    free(cliente12);
-    free(cliente13);
-    free(cliente14);
-    free(cliente15);
-    free(cliente16);
-    free(cliente17);
-    free(cliente18);
-    free(cliente19);
-    free(cliente20);
-    free(cliente21);
-    free(cliente22);
-    free(cliente23);
-    free(cliente24);
-    free(cliente25);
-    free(cliente26);
-    free(cliente27);
-    free(cliente28);
-    free(cliente29);
+    inserirElemento(tabela, cliente30);
+    imprimirTabela(tabela);
+    
    
     liberarTabela(tabela);
 
