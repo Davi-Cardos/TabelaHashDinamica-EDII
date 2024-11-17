@@ -179,7 +179,7 @@ int verificaDuplicacao(TABELAHASH *tabela) {
 void imprimirTabela(TABELAHASH *tabela) {
     printf("\nEstado atual da Tabela Hash:\n");
     for (int i = 0; i < tabela->tamanhoAtual; i++) {
-        printf("Posição %d: ", i);
+        printf("Posicao %d: ", i);
         ENDERECO *atual = tabela->tabela[i];
         while (atual != NULL) {
             printf("-> Cliente %d (%s) ", atual->cliente->codCliente, atual->cliente->nome);
