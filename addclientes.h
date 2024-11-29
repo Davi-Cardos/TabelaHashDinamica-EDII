@@ -4,30 +4,45 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define QTD_CLIENTES 50
+#define QTD_CLIENTES 15
 
 void insere_clientes(FILE* out) {
     printf("Inserindo %d clientes no arquivo...\n", QTD_CLIENTES);
 
 
-    char* nomes[50] = {
+    char* nomes[15] = {
    "João", "Maria", "Pedro", "Ana", "Paulo", "Carla", "Ricardo", "Fernanda",
-   "Lucas", "Juliana", "Leonardo", "Bianca", "Felipe", "Camila", "Bruno",
-   "Mariana", "Thiago", "Eduarda", "André", "Letícia", "Rodrigo", "Patrícia",
-   "Sérgio", "Cristina", "Maurício", "Vera", "Vinícius", "Sabrina", "Rafael",
-   "Marta", "Guilherme", "Natália", "Daniel", "Larissa", "Rogério", "Isabela",
-   "Gustavo", "Caroline", "Fábio", "Aline", "Marcelo", "Roberta", "Alexandre",
-   "Renata", "Diego", "Lúcia", "Roberto", "Flávia", "Antônio", "Helena"
+   "Lucas", "Juliana", "Leonardo", "Bianca", "Felipe", "Camila", "Bruno"
+
     };
 
-    // Vetor com 50 IDs fora de ordem
-    int codClientes[50] = {
+
+    int codClientes[15] = {
         35, 3, 27, 49, 12, 7, 18, 50, 42, 15,
-        1, 31, 19, 23, 9, 24, 4, 36, 46, 14,
-        22, 10, 32, 30, 43, 11, 16, 48, 26, 20,
-        34, 21, 45, 38, 13, 17, 47, 6, 25, 5,
-        2, 28, 39, 29, 44, 40, 41, 33, 8, 37
+         1, 31, 19, 23, 9 
     };
+
+    CLIENTE * novo_cliente;
+
+      for (int i = 0; i < QTD_CLIENTES; i++) {
+        novo_cliente = Cliente(codClientes[i], nomes[i]);
+        salva(novo_cliente, out);
+        free(novo_cliente);
+    }
+
+}
+
+void le_clientes(FILE* in) {
+    printf("\n\nLendo funcionários do arquivo...\n\n");
+    rewind(in);
+    CLIENTE* f;
+    while ((f = le(in)) != NULL) {
+        imprime(f);
+        free(f);
+    }
+}
+
+
 
 
 

@@ -15,6 +15,8 @@ void imprime(CLIENTE* func);
 // Cria Cliente. Lembrar de usar free(CLIENTE)
 CLIENTE* Cliente(int cod, char* nome);
 
+void salva(CLIENTE *cliente, FILE *out);
+
 // Le um CLIENTE do arquivo in na posicao atual do cursor
 // Retorna um ponteiro para CLIENTE lido do arquivo
 CLIENTE* le(FILE* in);

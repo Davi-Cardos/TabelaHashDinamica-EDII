@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "addclientes.h"
 
 
 typedef struct {
@@ -176,15 +177,22 @@ int verificaDuplicacao(TABELAHASH *tabela) {
 
 }
 
-void imprimirTabela(TABELAHASH *tabela) {
-    printf("\nEstado atual da Tabela Hash:\n");
+void imprimirTabela(TABELAHASH *tabela, FILE *arquivo) {
+    fseek(arquivo, 0, SEEK_SET); // Posiciona no início do arquivo
+    printf("\nEstado atual da Tabela Hash (lido do arquivo):\n");
+
+    // Ler os dados diretamente do arquivo para reconstruir a tabela hash
     for (int i = 0; i < tabela->tamanhoAtual; i++) {
         printf("Posição %d: ", i);
+
+        // Para cada posição, simula a leitura de uma lista encadeada
         ENDERECO *atual = tabela->tabela[i];
         while (atual != NULL) {
+            // Exibir cliente
             printf("-> Cliente %d (%s) ", atual->cliente->codCliente, atual->cliente->nome);
             atual = atual->prox;
         }
+
         printf("-> NULL\n");
     }
     printf("\n");
@@ -204,164 +212,45 @@ void liberarTabela(TABELAHASH *tabela) {
     free(tabela);          // Libera a estrutura TABELAHASH
 }
 
+void salvarTabelaNoArquivo(TABELAHASH *tabela, FILE *arquivo) {
+    for (int i = 0; i < tabela->tamanhoAtual; i++) {
+        if (tabela->tabela[i] != NULL) {
+            fwrite(tabela->tabela[i], sizeof(CLIENTE), 1, arquivo);
+        }
+    }
+}
+
+
 int main() {
-    int tamanhoInicial = 7;
+    int tamanhoInicial = 3;
     int fatorCarga = 1;
     TABELAHASH *tabela = inicializarTABELAHASH(tamanhoInicial, fatorCarga);
 
-    // Criação de clientes
-    CLIENTE *cliente1 = Cliente(49, "Joao");
-    CLIENTE *cliente2 = Cliente(51, "Carla");
-    CLIENTE *cliente3 = Cliente(3, "Jose");
-    CLIENTE *cliente4 = Cliente(59, "Maria");
-    CLIENTE *cliente5 = Cliente(87, "Bia");
-    CLIENTE *cliente6 = Cliente(103, "Ana");
-    CLIENTE *cliente7 = Cliente(7, "Carlos");
-    CLIENTE *cliente8 = Cliente(8, "Joao2");
-    CLIENTE *cliente9 = Cliente(14, "Carol");
-    CLIENTE *cliente10 = Cliente(15, "Pedro");
-    CLIENTE *cliente11 = Cliente(20, "Lucas");
-    CLIENTE *cliente12 = Cliente(31, "Fernanda");
-    CLIENTE *cliente13 = Cliente(42, "Leonardo");
-    CLIENTE *cliente14 = Cliente(53, "Paula");
-    CLIENTE *cliente15 = Cliente(64, "Gabriel");
-    CLIENTE *cliente16 = Cliente(75, "Julia");
-    CLIENTE *cliente17 = Cliente(86, "Henrique");
-    CLIENTE *cliente18 = Cliente(97, "Rafaela");
-    CLIENTE *cliente19 = Cliente(108, "Marcelo");
-    CLIENTE *cliente20 = Cliente(119, "Bianca");
-    CLIENTE *cliente21 = Cliente(25, "Marta");
-    CLIENTE *cliente22 = Cliente(37, "Eduardo");
-    CLIENTE *cliente23 = Cliente(48, "Renata");
-    CLIENTE *cliente24 = Cliente(59, "Roberto");
-    CLIENTE *cliente25 = Cliente(63, "Aline");
-    CLIENTE *cliente26 = Cliente(72, "Victor");
-    CLIENTE *cliente27 = Cliente(83, "Sofia");
-    CLIENTE *cliente28 = Cliente(91, "Thiago");
-    CLIENTE *cliente29 = Cliente(100, "Mariana");
-    CLIENTE *cliente30 = Cliente(56, "Dhulia");
-  
-    // Inserção de clientes e impressão da tabela após cada inserção
-    inserirElemento(tabela, cliente1);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
+    FILE *clientes = fopen("clientes.dat", "w+b");
+    FILE *arquivo_hash = fopen("hash.dat", "w+b");
 
-    inserirElemento(tabela, cliente2);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
+    if(clientes == NULL || arquivo_hash == NULL) {
+        printf("Não foi possível abrir o arquivo");
+        exit(1);
+    }
 
-    inserirElemento(tabela, cliente3);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
+    insere_clientes(clientes);
+    rewind(clientes);
 
-    inserirElemento(tabela, cliente4);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
+    CLIENTE * cliente = (CLIENTE *) malloc(sizeof(CLIENTE));
 
-    inserirElemento(tabela, cliente5);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
 
-    inserirElemento(tabela, cliente6);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
+    while(fread(cliente, sizeof(CLIENTE), 1, clientes) == 1) {
+        CLIENTE *clienteTab = Cliente(cliente->codCliente, cliente->nome);
+        inserirElemento(tabela, clienteTab);
+        salvarTabelaNoArquivo(tabela, arquivo_hash);
+        imprimirTabela(tabela, arquivo_hash);
 
-    inserirElemento(tabela, cliente7);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
+    }
 
-    inserirElemento(tabela, cliente8);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente9);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente10);
-    imprimirTabela(tabela);
-     printf("p = %d\n", tabela->proximoCompartimento);
-
-     inserirElemento(tabela, cliente11);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente12);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente13);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente14);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente15);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente16);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente17);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente18);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente19);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente20);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente21);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente22);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente23);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente24);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente25);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente26);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente27);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente28);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente29);
-    imprimirTabela(tabela);
-    printf("p = %d\n", tabela->proximoCompartimento);
-
-    inserirElemento(tabela, cliente30);
-    imprimirTabela(tabela);
-    
-   
+    free(cliente);
+    fclose(clientes);
+    fclose(arquivo_hash);
     liberarTabela(tabela);
 
     return 0;

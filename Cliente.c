@@ -12,6 +12,12 @@ void imprime(CLIENTE *cliente) {
     printf("%s\n", cliente->nome);
 }
 
+
+void salva(CLIENTE *cliente, FILE *out) {
+    fwrite(&cliente->codCliente, sizeof(int), 1, out);
+    fwrite(cliente->nome, sizeof(char), sizeof(cliente->nome), out);
+}
+
 // Cria cliente. Lembrar de usar free(func)
 CLIENTE *Cliente(int cod, char *nome) {
     CLIENTE *cliente = (CLIENTE *) malloc(sizeof(CLIENTE));
